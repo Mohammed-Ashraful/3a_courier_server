@@ -23,16 +23,14 @@ async function run() {
     console.log('Connected to db');
     const database = client.db('courier');
     const newsCollection = database.collection('news');
+    const servicesCollection=database.collection('service')
 
     //POST API 
     app.post('/service', async (req, res) => {
-      const services = {
-        "id": "1",
-        "img": "https://i.ibb.co/7vzTfvr/food.jpg",
-        "name": "Food aaa delivery",
-        "details": "Our food delivery service is so good . All of resturent in dhaka city take delivery from us . And we try to give best service 111111",
-        "cost": "5000"
-      }
+      const service = req.body;
+      const result =await servicesCollection.insertOne(service);
+      console.log(result);
+      res.json(result)
     })
   }
   finally {
