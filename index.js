@@ -21,7 +21,8 @@ async function run() {
     console.log('Connected to db');
     const database = client.db('courier');
     const newsCollection = database.collection('news');
-    const servicesCollection=database.collection('service')
+    const servicesCollection = database.collection('service')
+    const orderCollection = database.collection('order');
   //GET API  Load services data
     app.get('/service', async (req, res) => {
       const cursor = servicesCollection.find({})
@@ -42,7 +43,12 @@ async function run() {
       const news = await cursor.toArray();
       res.send(news)
     })
-
+    // GET ORDER API 
+    app.get('/order', async (req, res) => {
+      const cursor = orderCollection.find({})
+      const order = await cursor.toArray();
+      res.send(order)
+    })
 
     //POST API 
     app.post('/service', async (req, res) => {
@@ -50,6 +56,14 @@ async function run() {
       const result =await servicesCollection.insertOne(service);
       console.log(result);
       res.json(result)
+    })
+
+    //POST Order API 
+    app.post('/order', async (req, res) => {
+      const order = service = req.body;
+      const result = await orderCollection.insertOne(order);
+      console.log(result);
+      res.json(result);
     })
   }
   finally {
