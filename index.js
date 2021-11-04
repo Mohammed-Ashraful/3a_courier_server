@@ -2,9 +2,7 @@ const express = require('express');
 const { MongoClient } = require('mongodb');
 require('dotenv').config();
 const cors = require('cors');
-
-// PASS: LsSIU2OU98Ow5OXI;
-// NAME: courier;
+const ObjectId = require('mongodb').ObjectId;
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -24,6 +22,27 @@ async function run() {
     const database = client.db('courier');
     const newsCollection = database.collection('news');
     const servicesCollection=database.collection('service')
+  //GET API  Load services data
+    app.get('/service', async (req, res) => {
+      const cursor = servicesCollection.find({})
+      const service = await cursor.toArray();
+      res.send(service)
+    })
+  // GET Single data
+    app.get('/service/:id', async (req, res) => {
+      const id = req.params.id;
+      console.log('id',id);
+      const query = { _id: ObjectId(id) }
+      const service = await servicesCollection.findOne(query);
+      res.json(service)
+    })
+    //GET API Load news data;
+    app.get('/news', async (req, res) => {
+      const cursor = newsCollection.find({});
+      const news = await cursor.toArray();
+      res.send(news)
+    })
+
 
     //POST API 
     app.post('/service', async (req, res) => {
