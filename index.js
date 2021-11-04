@@ -60,11 +60,29 @@ async function run() {
 
     //POST Order API 
     app.post('/order', async (req, res) => {
-      const order = service = req.body;
+      const order =  req.body;
+      // const order = service = req.body;
       const result = await orderCollection.insertOne(order);
       console.log(result);
       res.json(result);
     })
+
+    //DELETE API 
+    app.delete('/order/:id', async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
+      const query = { _id: ObjectId(id) }
+      const deleted = await orderCollection.deleteOne(query);
+      console.log('Hitted');
+      res.json(deleted)
+    })
+    // app.get('/service/:id', async (req, res) => {
+    //   const id = req.params.id;
+    //   console.log('id', id);
+    //   const query = { _id: ObjectId(id) }
+    //   const service = await servicesCollection.findOne(query);
+    //   res.json(service)
+    // })
   }
   finally {
     // client.close();
